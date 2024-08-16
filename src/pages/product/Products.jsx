@@ -1,20 +1,32 @@
 import React from "react";
 import axios from "axios";
 import { useState,useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 
 function Products()
 {
     const[data,setdata] = useState([]);
 
+    const products = async()=>{
+        const response = await axios.get("http://localhost:8000/product");
+        setdata(response.data)
+    };
+
     useEffect(()=>{
-        const products = async()=>{
-            const response = await axios.get("http://localhost:8000/product");
-            setdata(response.data)
-        };
         products()
     },[]);
 
+    const handleDelete = async (slug) => {
+        if (window.confirm('Are you sure you want to delete this product?')) {
+          try {
+            await axios.delete(`http://localhost:8000/product/${slug}`);
+            products()
+          } catch (error) {
+            console.error('Error deleting product:', error);
+          }
+        }
+      };
     return (
         <>
             <section className="py-16 bg-gray-50">
@@ -39,9 +51,17 @@ function Products()
                         <td className="py-4 px-4">${product.price}</td>
                         <td className="py-4 px-4">{product.quantity}</td>
                         <td className="py-4 px-4">
-                            <button className="border-solid border-2 border-indigo-600 py-2 px-4 mx-2">Edit</button>
-                            <button className="border-solid border-2 border-indigo-600 py-2 px-4 mx-2">Delete</button>
-                          
+                            <Link to={`/product/edit/${product.slug}`}>
+                                <button className="border-solid border-2 border-indigo-600 py-2 px-4 mx-2 text-indigo-600 hover:bg-indigo-100 rounded">
+                                Edit
+                                </button>
+                            </Link>
+                            <button
+                                className="border-solid border-2 border-red-600 py-2 px-4 mx-2 text-red-600 hover:bg-red-100 rounded"
+                                onClick={() => handleDelete(product.slug)}
+                            >
+                                Delete
+                            </button>
                         </td>
                     </tr>
                     ))}    
