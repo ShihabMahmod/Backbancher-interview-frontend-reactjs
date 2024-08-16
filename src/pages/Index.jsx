@@ -4,6 +4,7 @@ import Home from "./Home";
 import Products from "./product/Products";
 import ProductStore from "./product/ProductStore";
 import ProductEdit from "./product/ProductEdit";
+import Login from "./auth/Login";
 import Header from "../components/Header";
 function Index()
 {
@@ -16,6 +17,7 @@ function Index()
                     <Route path="/products" element={<Products/>} />
                     <Route path="/product/store" element={<ProductStore/>} />
                     <Route path="/product/edit/:slug" element={<ProductEdit/>} />
+                    <Route path="/login" element={<Login/>} />
                 </Routes>
             </Router>
         </>
